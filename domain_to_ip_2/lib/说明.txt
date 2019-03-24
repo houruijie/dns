@@ -1,0 +1,10 @@
+启动:start.sh
+关闭:stop.sh
+重启:restart.sh
+一键部署:deploy.sh
+
+Python环境:python3
+
+环境变量:
+通用环境变量设置,加上下面这句
+export DNS_URL="http://127.0.0.1/7777/batch"

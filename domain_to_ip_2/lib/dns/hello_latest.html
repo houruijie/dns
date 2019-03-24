@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>域名解析API</title>
+</head>
+<body>
+    <h1 align="center">域名解析API使用说明</h1>
+        <h2>一、单台DNS解析</h2>
+        <h2>1.介绍：对给定域名在给定的单台DNS服务器上获取指定类型资源记录</h2>
+        <h2>2.使用方法：</h2>
+			<div></div>
+			<p style="text-indent: 2em;">在浏览器中输入URL：http://10.245.146.42:7777/single，加上参数domain、dns和type：</p>
+            <p style="text-indent: 2em;">·domain为查询域名（PTR类型时为IP），如www.baidu.com</p>
+            <p style="text-indent: 2em;">·dns为DNS服务器的IP地址，如1.2.4.8</p>
+            <p style="text-indent: 2em;">·type为资源记录类型，支持A/AAAA/CNAME/NS/MX/PTR/SOA/TXT（大小写不敏感）以及ALL（前述除PTR外所有类型）</p>
+            <!--<p style="text-indent: 2em;">·data为响应包数据部分，支持全部all/首部header/回答部分answer/权威部分authority/附加部分additional（除all外其余支持几项同时），如header,answer</p>-->
+            <p style="text-indent: 2em;">示例：</p>
+            <p style="text-indent: 2em;">·http://10.245.146.42:7777/single?domain=www.baidu.com&dns=1.2.4.8&type=a&data=all</p>
+            <p style="text-indent: 2em;">上述URL表示查询www.baidu.com在1.2.4.8上A记录的整个响应包</p>
+            <p style="text-indent: 2em;">·http://10.245.146.42:7777/single?domain=1.2.4.8&dns=8.8.8.8&type=ptr</p>
+            <p style="text-indent: 2em;">上述URL表示查询1.2.4.8在8.8.8.8上PTR记录的整个响应包</p>
+            <p style="text-indent: 2em;">（注意：通常PTR类型查询名字应为IP的倒序+in-addr.apra，为方便用户使用，本API只需domain为查询IP，type为PTR即为查询IP的PTR记录，用户无需对IP进行处理）</p>
+            <p style="text-indent: 2em;">缺省情况：</p>
+            <!--<p style="text-indent: 2em;">为了方便使用，本API设置了各参数的缺省值：</p>-->
+            <p style="text-indent: 2em;">·domain缺省为www.baidu.com</p>
+            <p style="text-indent: 2em;">·DNS缺省为47.94.47.91（研究中心自建DNS）</p>
+            <p style="text-indent: 2em;">·type缺省为A</p>
+            <!--<p style="text-indent: 2em;">data缺省为all</p>-->
+            <p style="text-indent: 2em;">简写示例：</p>
+            <p style="text-indent: 2em;">http://10.245.146.42:7777/single?domain=www.baidu.com</p>
+            <p style="text-indent: 2em;">上述URL表示查询www.baidu.com在47.94.47.91上A记录的整个响应包</p>
+        <h2>3.API响应结果</h2>
+            <p style="text-indent: 2em; font-size: 20px"><pre>
+            {
+              "city": "北京市",
+              "country": "中国",
+              "current time": "2019-01-16 21:27:10",
+              "dns": "1.2.4.8",
+              "domain": "baidu.com",
+              "isp": "中国互联网信息中心",
+              "province": "北京市",
+              "results": [
+                {
+                  "SOA": {
+                    "additional": [
+                      {
+                        "data": "202.108.22.220",
+                        "name": "dns.baidu.com",
+                        "ttl": "36221",
+                        "typename": "A"
+                      },
+                      {
+                        "data": "220.181.37.10",
+                        "name": "ns2.baidu.com",
+                        "ttl": "38736",
+                        "typename": "A"
+                      },
+                      {
+                        "data": "112.80.248.64",
+                        "name": "ns3.baidu.com",
+                        "ttl": "38737",
+                        "typename": "A"
+                      },
+                      {
+                        "data": "14.215.178.80",
+                        "name": "ns4.baidu.com",
+                        "ttl": "36032",
+                        "typename": "A"
+                      },
+                      {
+                        "data": "180.76.76.92",
+                        "name": "ns7.baidu.com",
+                        "ttl": "38739",
+                        "typename": "A"
+                      }
+                    ],
+                    "answer": [
+                      {
+                        "data": [
+                          "dns.baidu.com",
+                          "sa.baidu.com",
+                          [
+                            "serial",
+                            2012139640
+                          ],
+                          [
+                            "refresh ",
+                            300,
+                            "5 minutes"
+                          ],
+                          [
+                            "retry",
+                            300,
+                            "5 minutes"
+                          ],
+                          [
+                            "expire",
+                            2592000,
+                            "4 weeks"
+                          ],
+                          [
+                            "minimum",
+                            7200,
+                            "2 hours"
+                          ]
+                        ],
+                        "name": "baidu.com",
+                        "ttl": "555",
+                        "typename": "SOA"
+                      }
+                    ],
+                    "authority": [
+                      {
+                        "data": "ns2.baidu.com",
+                        "name": "baidu.com",
+                        "ttl": "38736",
+                        "typename": "NS"
+                      },
+                      {
+                        "data": "dns.baidu.com",
+                        "name": "baidu.com",
+                        "ttl": "38736",
+                        "typename": "NS"
+                      },
+                      {
+                        "data": "ns7.baidu.com",
+                        "name": "baidu.com",
+                        "ttl": "38736",
+                        "typename": "NS"
+                      },
+                      {
+                        "data": "ns4.baidu.com",
+                        "name": "baidu.com",
+                        "ttl": "38736",
+                        "typename": "NS"
+                      },
+                      {
+                        "data": "ns3.baidu.com",
+                        "name": "baidu.com",
+                        "ttl": "38736",
+                        "typename": "NS"
+                      }
+                    ],
+                    "header": {
+                      "aa": 0,
+                      "ancount": 1,
+                      "arcount": 5,
+                      "id": 19030,
+                      "nscount": 5,
+                      "opcode": 0,
+                      "opcodestr": "QUERY",
+                      "qdcount": 1,
+                      "qr": 1,
+                      "ra": 1,
+                      "rcode": 0,
+                      "rd": 1,
+                      "status": "NOERROR",
+                      "tc": 0,
+                      "z": 0
+                    },
+                    "query time": "30.37ms"
+                  }
+                }
+              ]
+            }
+            </pre></p>
+            <p style="text-indent: 2em;">current_time：当前时间；</p>
+            <p style="text-indent: 2em;">domain：查询域名；</p>
+            <p style="text-indent: 2em;">dns：DNS服务器的IP地址；</p>
+            <p style="text-indent: 2em;">country：DNS服务器所属国家；</p>
+            <p style="text-indent: 2em;">province：DNS服务器所属省或地区；</p>
+            <p style="text-indent: 2em;">city：DNS服务器所属市；</p>
+            <p style="text-indent: 2em;">isp：DNS服务器所属运营商；</p>
+            <p style="text-indent: 2em;">results：解析结果列表；</p>
+            <p style="text-indent: 2em;">A/AAAA/CNAME/NS/MX/PTR/SOA/TXT：资源记录类型；</p>
+            <p style="text-indent: 2em;">query time：查询耗时；</p>
+            <p style="text-indent: 2em;">header：响应包首部；</p>
+            <p style="text-indent: 2em;">answer：响应包回答部分；</p>
+            <p style="text-indent: 2em;">authority：响应包权威部分；</p>
+            <p style="text-indent: 2em;">additional：响应包附加部分。</p>
+        <h2>4.示例程序</h2>
+            <p style="text-indent: 2em; font-size: 20px"><pre>
+            # -*- coding: utf-8 -*-
+
+            import json
+            import requests
+
+            url = "http://10.245.146.42:7777/single"
+
+            def byteify(input, encoding='utf-8'):
+                if isinstance(input, dict):
+                    return {byteify(key): byteify(value) for key, value in input.iteritems()}
+                elif isinstance(input, list):
+                    return [byteify(element) for element in input]
+                elif isinstance(input, unicode):
+                    return input.encode(encoding)
+                else:
+                    return input
+
+            if __name__ == "__main__":
+
+                para = {}
+                para['domain'] = 'baidu.com'
+                para['dns'] = '1.2.4.8'
+                para['type'] = 'SOA'
+
+                r = requests.get(url, params=para)
+
+                results = json.loads(r.content)
+                results = byteify(results)
+
+                print "current time:", results['current time']
+                print "domain:", results['domain']
+                print "dns:", results['dns']
+                print "country:", results['country']
+                print "province:", results['province']
+                print "city:", results['city']
+                print "isp:", results['isp']
+
+                type_list = []
+                for result in results['results']:
+                    type_list = ['A', 'AAAA', 'CNAME', 'MX', 'NS', 'PTR', 'SOA', 'TXT']
+                    for typestr in type_list:
+                        try:
+                            record = result[typestr]
+                            print '-------------------------', typestr, 'RRs-----------------------'
+                            print "query time：", record['query time']
+                            header = record['header']
+                            print '-----------Header------------'
+                            print "id:", header['id']
+                            print "qr:", header['qr']
+                            print "opcodestr:", header['opcodestr']
+                            print "aa:", header['aa']
+                            print "tc:", header['tc']
+                            print "rd:", header['rd']
+                            print "ra:", header['ra']
+                            print "z:", header['z']
+                            print "status:", header['status']
+                            print "qdcount:", header['qdcount']
+                            print "ancount:", header['ancount']
+                            print "nscount:", header['nscount']
+                            print "arcount:", header['arcount']
+                            for answer in record['answer']:
+                                print '-----------Answer------------'
+                                print "name:", answer['name']
+                                print "ttl:", answer['ttl']
+                                print "type:", answer['typename']
+                                print "data:", answer['data']
+                            for authority in record['authority']:
+                                print '-----------Authority------------'
+                                print "name:", authority['name']
+                                print "ttl:", authority['ttl']
+                                print "type:", authority['typename']
+                                print "data:", authority['data']
+                            for additional in record['additional']:
+                                print '-----------Additional------------'
+                                print "name:", additional['name']
+                                print "ttl:", additional['ttl']
+                                print "type:", additional['typename']
+                                print "data:", additional['data']
+                        except:
+                            continue
+            </pre></p>
+            <p style="text-indent: 2em;">返回结果：</p>
+            <p style="text-indent: 2em; font-size: 20px"><pre>
+            current time: 2019-01-16 21:24:23
+            domain: baidu.com
+            dns: 1.2.4.8
+            country: 中国
+            province: 北京市
+            city: 北京市
+            isp: 中国互联网信息中心
+            ------------------------- SOA RRs-----------------------
+            query time： 26.97ms
+            -----------Header------------
+            id: 15986
+            qr: 1
+            opcodestr: QUERY
+            aa: 0
+            tc: 0
+            rd: 1
+            ra: 1
+            z: 0
+            status: NOERROR
+            qdcount: 1
+            ancount: 1
+            nscount: 5
+            arcount: 5
+            -----------Answer------------
+            name: baidu.com
+            ttl: 125
+            type: SOA
+            data: ['dns.baidu.com', 'sa.baidu.com', ['serial', 2012139640], ['refresh ', 300, '5 minutes'], ['retry', 300, '5 minutes'], ['expire', 2592000, '4 weeks'], ['minimum', 7200, '2 hours']]
+            -----------Authority------------
+            name: baidu.com
+            ttl: 36157
+            type: NS
+            data: ns7.baidu.com
+            -----------Authority------------
+            name: baidu.com
+            ttl: 36157
+            type: NS
+            data: dns.baidu.com
+            -----------Authority------------
+            name: baidu.com
+            ttl: 36157
+            type: NS
+            data: ns4.baidu.com
+            -----------Authority------------
+            name: baidu.com
+            ttl: 36157
+            type: NS
+            data: ns2.baidu.com
+            -----------Authority------------
+            name: baidu.com
+            ttl: 36157
+            type: NS
+            data: ns3.baidu.com
+            -----------Additional------------
+            name: dns.baidu.com
+            ttl: 36198
+            type: A
+            data: 202.108.22.220
+            -----------Additional------------
+            name: ns2.baidu.com
+            ttl: 36198
+            type: A
+            data: 220.181.37.10
+            -----------Additional------------
+            name: ns3.baidu.com
+            ttl: 36200
+            type: A
+            data: 112.80.248.64
+            -----------Additional------------
+            name: ns4.baidu.com
+            ttl: 36492
+            type: A
+            data: 14.215.178.80
+            -----------Additional------------
+            name: ns7.baidu.com
+            ttl: 36387
+            type: A
+            data: 180.76.76.92
+            </pre></p>
+
+        <h2>二、批量DNS解析</h2>
+		<h2>1.介绍：对给定域名在全国各地区、各运营商DNS服务器上获取指定类型资源记录集合</h2>
+        <h2>2.使用方法：</h2>
+			<div></div>
+            <p style="text-indent: 2em;">在浏览器中输入URL：http://10.245.146.42:7777/batch，加上参数domain、type与mode：</p>
+            <p style="text-indent: 2em;">·domain为查询域名（PTR类型时为IP），如www.baidu.com</p>
+            <p style="text-indent: 2em;">·type为记录类型，A/AAAA/CNAME/NS/MX/PTR/SOA/TXT（大小写不敏感）以及ALL（前述除PTR外所有类型）</p>
+            <p style="text-indent: 2em;">·mode为查询模式（1-1000的正整数），表示查询停止条件：连续mode个DNS没有新增解析结果返回则停止查询，如10（注意：mode越大，可能返回结果越多，相应耗时也越长）</p>
+            <p style="text-indent: 2em;">示例：</p>
+            <p style="text-indent: 2em;">·http://10.245.146.42:7777/batch?domain=baidu.com&type=mx&mode=10</p>
+            <p style="text-indent: 2em;">上述URL表示查询baidu.com在全国各地区、各运营商DNS服务器上MX记录的集合，当连续10个DNS没有新增解析结果时停止查询</p>
+            <p style="text-indent: 2em;">·http://10.245.146.42:7777/batch?domain=1.2.4.8&type=ptr&mode=5</p>
+            <p style="text-indent: 2em;">上述URL表示查询1.2.4.8在全国各地区、各运营商DNS服务器上反向解析记录的集合，当连续5个DNS没有新增解析结果时停止查询</p>
+            <p style="text-indent: 2em;">（注意：通常PTR类型查询名字应为IP的倒序+in-addr.apra，为方便用户使用，本API只需domain为查询IP，type为PTR即为查询IP的PTR记录，用户无需对IP进行处理）</p>
+            <p style="text-indent: 2em;">注意：</p>
+            <p style="text-indent: 2em;">·NS/MX/SOA/TXT记录是对注册域名（如baidu.com）而言，全域名(如www.baidu.com)一般无NS/MX/SOA/TXT记录</p>
+            <p style="text-indent: 2em;">·AAAA和CNAME记录是对全域名而言，注册域名一般无AAAA和CNAME记录</p>
+            <p style="text-indent: 2em;">·A记录是对全域名而言，但注册域名一般也有A记录（通常与全域名的A记录不同）</p>
+            <p style="text-indent: 2em;">·以上可解释解析结果为空或者和请求类型不一致的情况，若此情况并非本API的异常</p>
+    <h2>3.API响应结果</h2>
+            <p style="text-indent: 2em; font-size: 20px"><pre>
+            {
+              "current time": "2019-01-16 19:02:05",
+              "domain": "baidu.com",
+              "results": [
+                {
+                  "MX": [
+                    {
+                      "answer list": [
+                        {
+                          "data": "(10, 'mx.maillb.baidu.com')",
+                          "name": "baidu.com",
+                          "ttl": "617",
+                          "typename": "MX"
+                        },
+                        {
+                          "data": "(15, 'mx.n.shifen.com')",
+                          "name": "baidu.com",
+                          "ttl": "617",
+                          "typename": "MX"
+                        },
+                        {
+                          "data": "(20, 'jpmx.baidu.com')",
+                          "name": "baidu.com",
+                          "ttl": "617",
+                          "typename": "MX"
+                        },
+                        {
+                          "data": "(20, 'mx1.baidu.com')",
+                          "name": "baidu.com",
+                          "ttl": "617",
+                          "typename": "MX"
+                        },
+                        {
+                          "data": "(20, 'mx50.baidu.com')",
+                          "name": "baidu.com",
+                          "ttl": "617",
+                          "typename": "MX"
+                        }
+                      ],
+                      "city": "楚雄彝族自治州",
+                      "country": "中国",
+                      "dns": "49.239.0.253",
+                      "isp": "楚雄彝族自治州",
+                      "province": "云南省",
+                      "query time": "18.44ms"
+                    }
+                  ]
+                }
+              ]
+            }
+            </pre></p>
+            <p style="text-indent: 2em;">current_time：当前时间；</p>
+            <p style="text-indent: 2em;">domain：查询域名；</p>
+            <p style="text-indent: 2em;">results：解析结果列表；</p>
+            <p style="text-indent: 2em;">A/AAAA/CNAME/NS/MX/PTR/SOA/TXT：资源记录类型；</p>
+            <p style="text-indent: 2em;">answer list：回答部分资源记录；</p>
+            <p style="text-indent: 2em;">dns：DNS服务器的IP地址；</p>
+            <p style="text-indent: 2em;">country：DNS服务器所属国家；</p>
+            <p style="text-indent: 2em;">province：DNS服务器所属省或地区；</p>
+            <p style="text-indent: 2em;">city：DNS服务器所属市；</p>
+            <p style="text-indent: 2em;">isp：DNS服务器所属运营商；</p>
+            <p style="text-indent: 2em;">query time：查询耗时。</p>
+        <h2>4.示例程序</h2>
+            <p style="text-indent: 2em; font-size: 20px"><pre>
+            # -*- coding: utf-8 -*-
+
+            import json
+            import requests
+
+            url = "http://10.245.146.42:7777/batch"
+
+
+            def byteify(input, encoding='utf-8'):
+                if isinstance(input, dict):
+                    return {byteify(key): byteify(value) for key, value in input.iteritems()}
+                elif isinstance(input, list):
+                    return [byteify(element) for element in input]
+                elif isinstance(input, unicode):
+                    return input.encode(encoding)
+                else:
+                    return input
+
+            if __name__ == "__main__":
+
+                para = {}
+                para['domain'] = 'baidu.com'
+                para['type'] = 'mx'
+                para['mode'] = '10'
+
+                r = requests.get(url, params=para)
+
+                results = json.loads(r.content)
+                results = byteify(results)
+
+                current_time = results['current time']
+                domain = results['domain']
+
+                print "current time:", current_time
+                print "domain:", domain
+
+                type_list = []
+                for result in results['results']:
+                    type_list = ['A', 'AAAA', 'CNAME', 'MX', 'NS', 'PTR', 'SOA', 'TXT']
+                    for typestr in type_list:
+                        try:
+                            for subresult in result[typestr]:
+                                print '-------------------------',typestr,'RRs-----------------------'
+                                print "dns:", subresult['dns']
+                                print "country:", subresult['country']
+                                print "province:", subresult['province']
+                                print "city:", subresult['city']
+                                print "isp:", subresult['isp']
+                                print "query time：", subresult['query time']
+                                for answer in subresult['answer list']:
+                                    print '-----------Answer------------'
+                                    print "name:", answer['name']
+                                    print "ttl:", answer['ttl']
+                                    print "typename:", answer['typename']
+                                    print "data:", answer['data']
+                        except:
+                            continue
+            </pre></p>
+            <p style="text-indent: 2em;">返回结果：</p>
+            <p style="text-indent: 2em; font-size: 20px"><pre>
+            current time: 2019-01-16 18:59:16
+            domain: baidu.com
+            ------------------------- MX RRs-----------------------
+            dns: 118.118.118.1
+            country: 中国
+            province: 云南省
+            city: 楚雄彝族自治州
+            isp: 楚雄彝族自治州
+            query time： 33.8ms
+            -----------Answer------------
+            name: baidu.com
+            ttl: 7200
+            typename: MX
+            data: (10, 'mx.maillb.baidu.com')
+            -----------Answer------------
+            name: baidu.com
+            ttl: 7200
+            typename: MX
+            data: (15, 'mx.n.shifen.com')
+            -----------Answer------------
+            name: baidu.com
+            ttl: 7200
+            typename: MX
+            data: (20, 'jpmx.baidu.com')
+            -----------Answer------------
+            name: baidu.com
+            ttl: 7200
+            typename: MX
+            data: (20, 'mx1.baidu.com')
+            -----------Answer------------
+            name: baidu.com
+            ttl: 7200
+            typename: MX
+            data: (20, 'mx50.baidu.com')
+            </pre></p>
+</body>
+</html>

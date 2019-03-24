@@ -1,0 +1,11 @@
+启动: start.sh
+关闭: stop.sh
+一键部署:deploy.sh
+
+环境变量设置:不需要
+
+部署端口号:5000
+
+Python环境: Python2
+
+使用nohup python service.py &, 日志输出到nohp.out中

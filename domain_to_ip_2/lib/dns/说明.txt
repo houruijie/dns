@@ -1,0 +1,15 @@
+启动: start.sh
+停止: stop.sh
+重启: restart.sh
+一键部署:deploy.sh
+
+python环境:Python2
+
+部署端口:7777
+
+需要添加环境变量:mysql数据库的IP地址
+格式:DNS_DB_IP=10.245.146.43
+
+
+使用nohup python dns_new_tool.py &, 日志输出到nohp.out中
+
